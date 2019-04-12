@@ -23,7 +23,7 @@
 
         ctrl.isDemoMode = ConfigService.isDemoMode;
 
-        ctrl.isInvisibleForCurrentRuntime = isInvisibleForCurrentRuntime;
+        ctrl.isRuntimeBlockVisible = isRuntimeBlockVisible;
         ctrl.onConfigurationChangeCallback = onConfigurationChangeCallback;
 
         //
@@ -31,12 +31,11 @@
         //
 
         /**
-         * Checks if `Runtime Attributes` block is invisible for current
-         * @param {string} runtime
+         * Checks if `Runtime Attributes` block is visible
          * @returns {boolean}
          */
-        function isInvisibleForCurrentRuntime(runtime) {
-            return runtime !== 'shell' && runtime !== 'java';
+        function isRuntimeBlockVisible() {
+            return ctrl.version.spec.runtime === 'shell' || ctrl.version.spec.runtime === 'java';
         }
 
         /**
