@@ -5,8 +5,10 @@
         .factory('ControlPanelLogsDataService', ControlPanelLogsDataService);
 
     function ControlPanelLogsDataService($q, lodash, ElasticsearchService) {
+        var isDev = window.location.hostname === 'localhost';
+
         return {
-            entriesPaginated: search,
+            entriesPaginated: isDev ? searchMocked : search,
             logsPaginated: logsWidthReplicas
         };
 

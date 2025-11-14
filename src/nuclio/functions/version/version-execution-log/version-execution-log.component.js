@@ -28,8 +28,8 @@ such restriction.
             controller: NclVersionExecutionLogController
         });
 
-    function NclVersionExecutionLogController(lodash, moment, $interval, i18next, $i18next, $rootScope, ExecutionLogsDataService,
-                                              ExportService, LoginService, PaginationService) {
+    function NclVersionExecutionLogController(lodash, moment, $injector, $interval, i18next, $i18next, $rootScope,
+                                              ExecutionLogsDataService, ExportService, PaginationService) {
         var ctrl = this;
         var lng = i18next.language;
 
@@ -49,6 +49,7 @@ such restriction.
         };
         var projectName = '';
         var groupedReplicas = {};
+        var LoginService = null;
 
         ctrl.excludeOffline = false;
         ctrl.excludeOfflineIsDisabled = false;
@@ -189,6 +190,10 @@ such restriction.
          * Initialization method
          */
         function onInit() {
+            if ($injector.has('LoginService')) {
+                LoginService = $injector.get('LoginService')
+            }
+
             defaultFilter.name = ctrl.version.metadata.name;
             ctrl.filter = lodash.cloneDeep(defaultFilter);
 
@@ -411,7 +416,7 @@ such restriction.
          */
         function autoUpdate() {
             // since this function is used for polling - stop polling if user is not logged in
-            if (!LoginService.isLoggedIn()) {
+            if (LoginService && !LoginService.isLoggedIn()) {
                 return;
             }
 

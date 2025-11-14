@@ -4,12 +4,13 @@
     angular.module('iguazio.dashboard-controls')
         .factory('ExecutionLogsDataService', ExecutionLogsDataService);
 
-    function ExecutionLogsDataService($rootScope, $i18next, $q, i18next, lodash, NuclioRestangular) {
+    function ExecutionLogsDataService($rootScope, $i18next, $q, i18next, lodash, ControlPanelLogsDataService, NuclioRestangular) {
+        var isDev = window.location.hostname === 'localhost';
         var lng = i18next.language;
 
         return {
             collectLogs: collectLogs,
-            logsPaginated: logsPaginated,
+            logsPaginated: isDev ? ControlPanelLogsDataService.entriesPaginated : logsPaginated,
             getReplicasList: getReplicasList
         };
 

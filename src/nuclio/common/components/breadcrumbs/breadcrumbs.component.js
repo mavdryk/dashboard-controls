@@ -30,6 +30,7 @@ such restriction.
     function NclBreadcrumbsController($scope, $state, $stateParams, $transitions, lodash) {
         var ctrl = this;
         var siteOrigin = null;
+        var nuclioSiteOrigin = null;
 
         ctrl.mainHeaderTitle = {};
 
@@ -48,6 +49,7 @@ such restriction.
          */
         function onInit() {
             siteOrigin = sessionStorage.getItem('origin')
+            nuclioSiteOrigin = sessionStorage.getItem('nuclioOrigin')
 
             setMainHeaderTitle();
 
@@ -66,6 +68,11 @@ such restriction.
         function goToProjectsList() {
             if (siteOrigin) {
                 window.location.href = siteOrigin + '/mlrun/projects'
+            } else if (nuclioSiteOrigin) {
+                window.parent.postMessage({
+                    type: 'REDIRECT',
+                    value: '/projects'
+                }, nuclioSiteOrigin)
             } else {
                 $state.go('app.projects');
             }
@@ -77,6 +84,11 @@ such restriction.
         function goToProjectScreen() {
             if (siteOrigin) {
                 window.location.href = siteOrigin + '/mlrun/projects/' + $stateParams.projectId
+            } else if (nuclioSiteOrigin) {
+                window.parent.postMessage({
+                    type: 'REDIRECT',
+                    value: '/projects/' + $stateParams.projectId + '/monitor'
+                }, nuclioSiteOrigin)
             } else {
                 $state.go('app.project', {
                     projectId: $stateParams.projectId
